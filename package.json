@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-expose",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A babel plugin that exposes ES6 modules to global namespace.",
   "license": "MIT",
   "repository": "szarouski/babel-plugin-expose",
