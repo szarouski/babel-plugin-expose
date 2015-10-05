@@ -62,19 +62,25 @@ module.exports = function (babel) {
     var exposeTransformer = new babel.Transformer('expose', {
         Program: function (node) {
             var contents = node.body;
-            //noinspection JSUnresolvedFunction
-            node.body = [
-                t.expressionStatement(
-                    t.callExpression(
-                        t.memberExpression(
-                            t.functionExpression(null, [], t.blockStatement(contents)),
-                            t.identifier('call'),
-                            false
-                        ),
-                        [t.identifier('this')]
+            var hasImportOrExport = false;
+            node.body.forEach(function (subNode) {
+                hasImportOrExport = hasImportOrExport || /(Import|Export).*Declaration/.test(subNode.type);
+            });
+            if (hasImportOrExport) {
+                //noinspection JSUnresolvedFunction
+                node.body = [
+                    t.expressionStatement(
+                        t.callExpression(
+                            t.memberExpression(
+                                t.functionExpression(null, [], t.blockStatement(contents)),
+                                t.identifier('call'),
+                                false
+                            ),
+                            [t.identifier('this')]
+                        )
                     )
-                )
-            ];
+                ];
+            }
             return node;
         },
 
