@@ -50,9 +50,10 @@ module.exports = function (babel) {
         }
 
         if (name in globalNamespace) {
-            throw new Error (name + ' is already defined, please change name for ' + this.filename + ':' + line);
+            throw new Error (name + ' is already defined in ' + globalNamespace[name] +
+                ', please change name for ' + this.filename + ':' + line);
         }
-        globalNamespace[name] = true;
+        globalNamespace[name] = this.filename;
     };
     ExportManager.getFilenameFromContext = function getFilenameFromContext(context) {
         return context.state.opts.filename;
