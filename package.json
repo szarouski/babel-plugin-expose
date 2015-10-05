@@ -1,0 +1,27 @@
+{
+  "name": "babel-plugin-expose",
+  "version": "1.0.0",
+  "description": "A babel plugin that exposes ES6 modules to global namespace.",
+  "license": "MIT",
+  "repository": "szarouski/babel-plugin-expose",
+  "author": {
+    "name": "Sergey Zarouski",
+    "email": "sergey@webuniverse.io"
+  },
+  "main": "index.js",
+  "scripts": {
+  },
+  "keywords": [
+    "babel",
+    "es6",
+    "globals",
+    "expose",
+    "module",
+    "plugin"
+  ],
+  "dependencies": {
+    "babel-core": "^5.4.7"
+  },
+  "devDependencies": {
+  }
+}
