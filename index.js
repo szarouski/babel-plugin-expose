@@ -59,6 +59,36 @@ module.exports = function (babel) {
         return context.state.opts.filename;
     };
 
+    /**
+     * @param {{context: Object, contents: Array}} params
+     * @constructor
+     */
+    function StrictModeManager(params) {
+        /**
+         * @type {Array}
+         */
+        this.contents = params.contents;
+        this.shouldUseStrict = StrictModeManager.shouldUseStrict(params.context);
+    }
+    StrictModeManager.prototype.insertIfPossible = function () {
+        if (this.shouldUseStrict) {
+            this.contents.unshift(
+                t.expressionStatement(
+                    t.literal('use strict;')
+                )
+            );
+        }
+    };
+    /**
+     * @param {Object} context
+     * @returns {Array}
+     */
+    StrictModeManager.shouldUseStrict = function shouldUseStrict(context) {
+        var extra = context.state.opts.extra || {};
+        var options = extra.expose || {};
+        return options.strict != null ? options.strict : true;
+    };
+
     //noinspection UnnecessaryLocalVariableJS,JSUnusedGlobalSymbols
     var exposeTransformer = new babel.Transformer('expose', {
         Program: function (node) {
@@ -68,6 +98,10 @@ module.exports = function (babel) {
                 hasImportOrExport = hasImportOrExport || /(Import|Export).*Declaration/.test(subNode.type);
             });
             if (hasImportOrExport) {
+                new StrictModeManager({
+                    context: this,
+                    contents: contents
+                }).insertIfPossible();
                 //noinspection JSUnresolvedFunction
                 node.body = [
                     t.expressionStatement(
