@@ -2,7 +2,8 @@
 
 module.exports = function (babel) {
     var t = babel.types;
-    var globalNamespace = {};
+    global.babelPluginExposeGlobalNamespace = {};
+    var globalNamespace;
 
     /**
      * @param {{context: Object, declaration: Object}} params
@@ -49,6 +50,7 @@ module.exports = function (babel) {
             line = declaration.loc.start.line;
         }
 
+        globalNamespace = global.babelPluginExposeGlobalNamespace;
         if (name in globalNamespace) {
             throw new Error (name + ' is already defined in ' + globalNamespace[name] +
                 ', please change name for ' + this.filename + ':' + line);
